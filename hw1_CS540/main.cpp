@@ -2,7 +2,9 @@
 #include <vector>
 #include <string>
 #include <array>
-#include <stdio.h>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 // Write a program that utilizes the shell or system function to execute various shell commands
 // I created this using macOS so commands are predominantly for terminal
@@ -37,7 +39,6 @@ int main ()
         std::cin>>command;
 
         while (std::cin.fail()){
-            std::cout <<"\nERROR! Please enter a valid input from menu.\n\n";
             std::cin.clear();
             std::cin.ignore(256,'\n');
             command = -1;
@@ -61,14 +62,22 @@ int main ()
             case 3: // mkdir
                 std::cout<<"-> Enter new directory name: ";
                 std::cin>>mkdir;
-                if (mkdir == "!") break; // Back out of command
-                system(("mkdir " + mkdir).c_str());
+                if (mkdir == "!" or mkdir == " " or mkdir == "") break; // Back out of command
+                if (fs::exists(mkdir)){
+                    std::cout<<"\n--> !Error: Directory '" + mkdir + "' already exists!\n\n";
+                    break;
+                }
+                else system(("mkdir " + mkdir).c_str());
                 std::cout<<"\n--> New directory '" + mkdir + "' created!\n\n";
                 break;
             case 4: // touch
                 std::cout<<"Create new file (Enter '!' to return) : ";
                 std::cin>>touch;
-                if (touch == "!") break; // Back out of command
+                if (touch == "!" or touch == " " or touch == "") break; // Back out of command
+                if (fs::exists(touch)){
+                    std::cout<<"\n--> !Error: Filename '" + touch + "' already exists!\n\n";
+                    break;
+                }
                 system(("touch " + touch).c_str());
                 std::cout<<"\nWould you like to enter any text to the file?\n";
                 std::cout<<"Y: Yes\nN: No\n-> ";
@@ -84,7 +93,7 @@ int main ()
             case 5: // rm / rmdir
                 std::cout<<"-> Enter file or directory to remove (Enter '!' to return) : ";
                 std::cin>>toRemove;
-                if (toRemove == "!") break; // Back out of command
+                if (toRemove == "!" or toRemove == " " or toRemove == "") break; // Back out of command
                 isTextFile = false;
                 // open pipe to rm or rmdir to see if file or directory exist
                 for (auto& c : toRemove){
