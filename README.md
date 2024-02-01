@@ -28,6 +28,5 @@ I added some additional features such as:
 | (6) -> Display a message                             |
 | (7) -> Concatenate and display content of a file     |
 | (0) -> Exit                                          |
-|______________________________________________________|
 
 **When finished enter 0 to exit**
