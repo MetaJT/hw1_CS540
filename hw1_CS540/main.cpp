@@ -4,7 +4,9 @@
 #include <array>
 #include <filesystem>
 
-namespace fs = std::filesystem;
+namespace fs = std::filesystem; // Using this to check if the file/directory exists
+
+// Git repo https://github.com/MetaJT/hw1_CS540.git
 
 // Write a program that utilizes the shell or system function to execute various shell commands
 // I created this using macOS so commands are predominantly for terminal
@@ -50,19 +52,23 @@ int main ()
                 system("exit");
                 break;
             case 1: // ls
+                // Prints all of the items in the current directory
                 std::cout<<"\nItem(s) in current directory:\n--> ";
                 system("ls");
                 std::cout<<"\n";
                 break;
             case 2: // pwd
+                // Displays the current directory
                 std::cout<<"\nPath for current directory:\n--> ";
                 system("pwd");
                 std::cout<<"\n";
                 break;
             case 3: // mkdir
+                // Creates a new directory
                 std::cout<<"-> Enter new directory name: ";
                 std::cin>>mkdir;
                 if (mkdir == "!" or mkdir == " " or mkdir == "") break; // Back out of command
+                // Check to see if the file already exists
                 if (fs::exists(mkdir)){
                     std::cout<<"\n--> !Error: Directory '" + mkdir + "' already exists!\n\n";
                     break;
@@ -71,6 +77,7 @@ int main ()
                 std::cout<<"\n--> New directory '" + mkdir + "' created!\n\n";
                 break;
             case 4: // touch
+                // Creates a new file
                 std::cout<<"Create new file (Enter '!' to return) : ";
                 std::cin>>touch;
                 if (touch == "!" or touch == " " or touch == "") break; // Back out of command
@@ -79,6 +86,7 @@ int main ()
                     break;
                 }
                 system(("touch " + touch).c_str());
+                // Ask the user if they would like to input text to the created file
                 std::cout<<"\nWould you like to enter any text to the file?\n";
                 std::cout<<"Y: Yes\nN: No\n-> ";
                 std::cin>>textInput;
@@ -86,11 +94,13 @@ int main ()
                 {
                     std::cout<<"Enter text:\n->";
                     std::getline(std::cin>>std::ws, text);
+                    // Inputs the provided text to the new file
                     system(("echo " + text + " >> " + touch).c_str());
                 }
                 std::cout<<"New file '" + touch + "' created!\n";
                 break;
             case 5: // rm / rmdir
+                // Removes file or directory
                 std::cout<<"-> Enter file or directory to remove (Enter '!' to return) : ";
                 std::cin>>toRemove;
                 if (toRemove == "!" or toRemove == " " or toRemove == "") break; // Back out of command
@@ -121,6 +131,7 @@ int main ()
                 }
                 // If pipe close is successful then the file exist else false
                 if (WEXITSTATUS(status) == 0) {
+                    // Identify if the input is asking for a text file or directory
                     if (!isTextFile)
                         std::cout<<"\n--> The directory '" + toRemove + "' has been removed!\n\n";
                     else
@@ -134,17 +145,20 @@ int main ()
                 }
                 break;
             case 6: // echo
+                // Displays message to terminal
                 std::cout<<"Enter the message you want to be displayed: ";
-                std::getline(std::cin>>std::ws, echo);
+                std::getline(std::cin>>std::ws, echo); // ws ignores the white spaces
                 std::cout<<"--> ";
                 system(("echo " + echo).c_str());
                 std::cout<<"\n";
                 break;
             case 7: // cat
+                // Concatenates and displays contents of a file
                 std::cout<<"Enter the file name (Enter '!' to return) : ";
                 std::cin>>fileName;
-                if (fileName == "!") break; // Back out of command
+                if (fileName == "!" or fileName == " " or fileName == "") break; // Back out of command
                 
+                // Open pipe to see if entered file exists
                 pipe = popen(("cat " + fileName + " 2>&1").c_str(), "r");
                 
                 if (!pipe) {
@@ -159,10 +173,12 @@ int main ()
                     perror("pclose failed");
                     return EXIT_FAILURE;
                 }
+                // If pipe closes successfully and file is found
                 if (WEXITSTATUS(status) == 0){
                     std::cout<<"-> Contents of '" + fileName + "':\n\n";
                     system(("cat " + fileName).c_str());
                 }
+                // Else pipe is unsuccessful and file is not found
                 else{
                     std::cout<<"\n!ERROR: No such file or directory '" + fileName + "' found!\n";
                     std::cout<<"\nSee available file(s) and directories: \n--> ";
@@ -171,6 +187,7 @@ int main ()
                 }
                 break;
             default:
+                // If the command doesn't match any of the possible case options then prints error
                 std::cout <<"\nERROR! Please enter a valid input from menu.\n\n";
                 break;
         }
