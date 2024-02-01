@@ -4,9 +4,8 @@
 #include <array>
 #include <stdio.h>
 
-// This program acts as an OS to handle different commands that can
-// be ran in the command line
-// I created this using MacOS so commands are predominantly for terminal
+// Write a program that utilizes the shell or system function to execute various shell commands
+// I created this using macOS so commands are predominantly for terminal
 // Jordan Trotter 01/31/24
 // Wichita State Univeristy - CS 540
 
@@ -62,12 +61,14 @@ int main ()
             case 3: // mkdir
                 std::cout<<"-> Enter new directory name: ";
                 std::cin>>mkdir;
+                if (mkdir == "!") break; // Back out of command
                 system(("mkdir " + mkdir).c_str());
                 std::cout<<"\n--> New directory '" + mkdir + "' created!\n\n";
                 break;
             case 4: // touch
-                std::cout<<"Create new file: ";
+                std::cout<<"Create new file (Enter '!' to return) : ";
                 std::cin>>touch;
+                if (touch == "!") break; // Back out of command
                 system(("touch " + touch).c_str());
                 std::cout<<"\nWould you like to enter any text to the file?\n";
                 std::cout<<"Y: Yes\nN: No\n-> ";
@@ -80,18 +81,19 @@ int main ()
                 }
                 std::cout<<"New file '" + touch + "' created!\n";
                 break;
-            case 5: // rmdir
-                std::cout<<"-> Enter file or directory to remove: ";
+            case 5: // rm / rmdir
+                std::cout<<"-> Enter file or directory to remove (Enter '!' to return) : ";
                 std::cin>>toRemove;
+                if (toRemove == "!") break; // Back out of command
                 isTextFile = false;
                 // open pipe to rm or rmdir to see if file or directory exist
-                // need to figure out which command to use
                 for (auto& c : toRemove){
                     if (c == '.'){
                         isTextFile = true;
                         break;
                     }
                 }
+                // need to figure out which command to use
                 if (isTextFile) pipe = popen(("rm " + toRemove + " 2>&1").c_str(), "r");
                 else pipe = popen(("rmdir " + toRemove + " 2>&1").c_str(), "r");
                 
@@ -110,13 +112,10 @@ int main ()
                 }
                 // If pipe close is successful then the file exist else false
                 if (WEXITSTATUS(status) == 0) {
-                    if (!isTextFile){
-                        //system(("rmdir " + toRemove).c_str());
+                    if (!isTextFile)
                         std::cout<<"\n--> The directory '" + toRemove + "' has been removed!\n\n";
-                    } else{
-                        //system(("rm " + toRemove).c_str());
+                    else
                         std::cout<<"\n--> The file'" + toRemove + "' has been removed!\n\n";
-                    }
                 }
                 else {
                     std::cout<<"\n!ERROR: No such file or directory '" + toRemove + "' found!\n";
@@ -133,8 +132,9 @@ int main ()
                 std::cout<<"\n";
                 break;
             case 7: // cat
-                std::cout<<"Enter the file name: ";
+                std::cout<<"Enter the file name (Enter '!' to return) : ";
                 std::cin>>fileName;
+                if (fileName == "!") break; // Back out of command
                 
                 pipe = popen(("cat " + fileName + " 2>&1").c_str(), "r");
                 
@@ -162,6 +162,7 @@ int main ()
                 }
                 break;
             default:
+                std::cout <<"\nERROR! Please enter a valid input from menu.\n\n";
                 break;
         }
     }
