@@ -32,4 +32,4 @@ I added some additional features such as:
 **When finished enter 0 to exit**
 
 
-I did my best to address error handling so that it continues to run when there is an invalid input
+I did my best to address error handling so that it continues to run when there is an invalid input.
