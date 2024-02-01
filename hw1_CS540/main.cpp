@@ -37,6 +37,13 @@ int main ()
         std::cout<<"\nPlease enter input command to be executed: ";
         std::cin>>command;
 
+        while (std::cin.fail()){
+            std::cout <<"\nERROR! Please enter a valid input from menu.\n\n";
+            std::cin.clear();
+            std::cin.ignore(256,'\n');
+            command = -1;
+        }
+        
         switch(command){
             case 0: // exit
                 std::cout<<"\n--> Exiting... Goodbye!\n";
@@ -155,12 +162,6 @@ int main ()
                 }
                 break;
             default:
-                while (std::cin.fail()){
-                    std::cout <<"\nERROR! Please enter a valid input from menu.\n\n";
-                    std::cin.clear();
-                    std::cin.ignore(256,'\n');
-                    command = -1;
-                }
                 break;
         }
     }
