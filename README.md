@@ -16,3 +16,18 @@ I added some additional features such as:
 - Removing files and directories
 - The ability to add text to text file
 
+**Directions: Input the number related to the command you want to execute**
+------------------------------------------------------
+|                  TERMINAL COMMANDS                   |
+|------------------------------------------------------|
+| (1) -> List directory contents                       |
+| (2) -> Print working directory                       |
+| (3) -> Create a new directory                        |
+| (4) -> Create a new file                             |
+| (5) -> Remove an existing file or directory          |
+| (6) -> Display a message                             |
+| (7) -> Concatenate and display content of a file     |
+| (0) -> Exit                                          |
+|______________________________________________________|
+
+**When finished enter 0 to exit**
